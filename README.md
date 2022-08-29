@@ -25,6 +25,7 @@ This article would help you to with step by step installation and configuration 
 1. Two RedHat OpenShift Cluster v4.9 or later with Storage Provisioned, IngressDomain configured. Pls ensure your OpenShift cluster configured with 16Core x 32GB RAM worker node. Minimum 3 worker nodes in each cluster.
 2. HAProxy node which would act as load balancer for APIConnect in both the cluster. 
 3. OpenShift Command line tool. `oc`
+4. `yq` cli version 4.18.1 or later`
 
 
 #### Data Center A - OpenShift Cluster Readiness
@@ -197,6 +198,13 @@ oc get secret apis-dev-ingress-ca -o yaml > ca-issuer-secret.yaml
 ***NOTE:-***
 Open ca-issuer-secret.yaml file, remove creationTimestamp, resourceVersion, uid, selfLink and managedFields property and save the file.
 
+```
+yq -i 'del(.metadata.uid)' ca-issuer-secret.yaml && cat ca-issuer-secret.yaml
+yq -i 'del(.metadata.creationTimestamp)' ca-issuer-secret.yaml && cat ca-issuer-secret.yaml
+yq -i 'del(.metadata.resourceVersion)' ca-issuer-secret.yaml && cat ca-issuer-secret.yaml
+
+```
+
 ### Install and Configure APIConnect in Data Center B
 Using `oc` cli, Login to OpenShift cluster
 ```
@@ -214,6 +222,16 @@ oc new-project apic
 Have Common Services Operand Request created
 ```
 oc apply -f common-services-operandrequest.yaml
+```
+If you see some exception like the below, wait for sometime an re-run the above command
+
+```
+unable to recognize "common-services-operandrequest.yaml": no matches for kind "OperandRequest" in version "operator.ibm.com/v1alpha1"
+unable to recognize "common-services-operandrequest.yaml": no matches for kind "OperandRequest" in version "operator.ibm.com/v1alpha1"
+unable to recognize "common-services-operandrequest.yaml": no matches for kind "OperandRequest" in version "operator.ibm.com/v1alpha1"
+unable to recognize "common-services-operandrequest.yaml": no matches for kind "OperandRequest" in version "operator.ibm.com/v1alpha1"
+unable to recognize "common-services-operandrequest.yaml": no matches for kind "OperandRequest" in version "operator.ibm.com/v1alpha1"
+unable to recognize "common-services-operandrequest.yaml": no matches for kind "OperandRequest" in version "operator.ibm.com/v1alpha1"
 ```
 
 ```
