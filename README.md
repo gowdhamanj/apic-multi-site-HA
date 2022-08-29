@@ -96,7 +96,7 @@ site-b-ingress-endpoint        142.126.108.171
 `***NOTE***`
 In the Active/Passive deployment, the `HAProxy should contain an entry that should always points to Active Site.` In this example, DataCenter A is an Active Site now. We also have the details of DataCenter B which is commented for future use while testing failover scenario. While we do a failover scenario testing, we need to swap the entry. i.e. Active becomes Passive and vice-versa. 
 
-#### Install and Configure APIConnect in Data Center A
+### Install and Configure APIConnect in Data Center A
 
 Clone this repository 
 ```
@@ -113,7 +113,9 @@ Create CatalogSource & Subscription for APIConnect Operator.
 oc apply -f CatalogSource.yaml
 oc apply -f Subscription.yaml
 ```
-Create a namespace for APIConnect
+Pls wait for few mins before you go-ahead. Ensure APIConnect Operator is installed in "openshift-operators" namespace.
+
+Create a namespace for deploying APIConnect instancee
 ```
 oc new-project apic
 ```
@@ -137,9 +139,18 @@ oc create secret docker-registry ibm-entitlement-key \
     --docker-server=cp.icr.io \
     --namespace=$APIC_NAMESPACE
 ```
+Before you run the below command, Ensure you have "Cert Manager" Operator instaled in `ibm-common-services` namespace.
 Create CertManager for APIC instance
 ```
 oc apply -f Cert-Manager-for-api-instance-in-Datacenter-A.yaml
+```
+In case of any such below exceptions, wait for sometime and re-run the above command again.
+```
+Error from server (InternalError): error when creating "Cert-Manager-for-api-instance-in-Datacenter-A.yaml": Internal error occurred: failed calling webhook "webhook.cert-manager.io": failed to call webhook: Post "https://cert-manager-webhook.ibm-common-services.svc:443/mutate?timeout=10s": no endpoints available for service "cert-manager-webhook"
+Error from server (InternalError): error when creating "Cert-Manager-for-api-instance-in-Datacenter-A.yaml": Internal error occurred: failed calling webhook "webhook.cert-manager.io": failed to call webhook: Post "https://cert-manager-webhook.ibm-common-services.svc:443/mutate?timeout=10s": no endpoints available for service "cert-manager-webhook"
+Error from server (InternalError): error when creating "Cert-Manager-for-api-instance-in-Datacenter-A.yaml": Internal error occurred: failed calling webhook "webhook.cert-manager.io": failed to call webhook: Post "https://cert-manager-webhook.ibm-common-services.svc:443/mutate?timeout=10s": no endpoints available for service "cert-manager-webhook"
+Error from server (InternalError): error when creating "Cert-Manager-for-api-instance-in-Datacenter-A.yaml": Internal error occurred: failed calling webhook "webhook.cert-manager.io": failed to call webhook: Post "https://cert-manager-webhook.ibm-common-services.svc:443/mutate?timeout=10s": no endpoints available for service "cert-manager-webhook"
+Error from server (InternalError): error when creating "Cert-Manager-for-api-instance-in-Datacenter-A.yaml": Internal error occurred: failed calling webhook "webhook.cert-manager.io": failed to call webhook: Post "https://cert-manager-webhook.ibm-common-services.svc:443/mutate?timeout=10s": no endpoints available for service "cert-manager-webhook"
 ```
 We should create the common Encryption Key for Management & Portal component between both the Site A & B
 ```
@@ -149,6 +160,8 @@ We should create the common Encryption Key for Management & Portal component bet
  oc create secret generic ptl-encryption-key --from-file=encryption_secret=ptl-enc-key.txt -n $APIC_NAMESPACE
 ```
 While we are working on Data Center A, we should provide IngressDomain of Data Center B. I assume you have IngressDomain name handy which you would have obtained in section `Data Center B - OpenShift Cluster Readiness`
+
+Pls update the below environment varibles before setting it up.
 
 ```
 export DATA_CENTRE_A_INGRESS_DOMAIN=<pasted the Ingress domain of the Data Center A>
@@ -169,7 +182,7 @@ cat A1.yaml | sed "s/TO_BE_REPLACED_BY_DATA_CENTER_B_INGRESS_DOMAIN/$DATA_CENTRE
 cat A2.yaml | sed "s/TO_BE_REPLACED_BY_DATA_CENTER_A_RWO_STORAGECLASS/$DATA_CENTER_A_RWO_STORAGECLASS/" > A3.yaml
 cat A3.yaml | sed "s/TO_BE_REPLACED_HA_PROXY_IP/$HA_PROXY_IP/" > A4.yaml
 cat A4.yaml | sed "s/TO_BE_REPLACED_HA_MODE/$HA_MODE/" > apic-instance-in-data-center-A.yaml
-rm -rf A1.yaml , A2.yaml, A3.yaml,  A4.yaml
+rm -f A1.yaml A2.yaml A3.yaml A4.yaml
 
 ```
 
@@ -184,7 +197,7 @@ oc get secret apis-dev-ingress-ca -o yaml > ca-issuer-secret.yaml
 ***NOTE:-***
 Open ca-issuer-secret.yaml file, remove creationTimestamp, resourceVersion, uid, selfLink and managedFields property and save the file.
 
-#### Install and Configure APIConnect in Data Center B
+### Install and Configure APIConnect in Data Center B
 Using `oc` cli, Login to OpenShift cluster
 ```
 oc login --token=sha256~a8lvYB14bIO7HhjJ7KIb4JgP2eT_G2Pg2mgDT3kEkZs --server=https://c100-e.eu-gb.containers.cloud.ibm.com:32280
@@ -237,7 +250,7 @@ cat B1.yaml | sed "s/TO_BE_REPLACED_BY_DATA_CENTER_A_INGRESS_DOMAIN/$DATA_CENTRE
 cat B2.yaml | sed "s/TO_BE_REPLACED_BY_DATA_CENTER_B_RWO_STORAGECLASS/$DATA_CENTER_B_RWO_STORAGECLASS/" > B3.yaml
 cat B3.yaml | sed "s/TO_BE_REPLACED_HA_PROXY_IP/$HA_PROXY_IP/" > B4.yaml
 cat B4.yaml | sed "s/TO_BE_REPLACED_HA_MODE/$HA_MODE/" > apic-instance-in-data-center-B.yaml
-rm -rf B1.yaml , B2.yaml, B3.yaml, B4.yaml
+rm -f B1.yaml B2.yaml B3.yaml B4.yaml
 
 ```
 Create the Management & Portal Encryption Key. The same key that is used in Data Center A
