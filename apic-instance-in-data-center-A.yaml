@@ -1,0 +1,147 @@
+apiVersion: apiconnect.ibm.com/v1beta1
+kind: APIConnectCluster
+metadata:
+  labels:
+    app.kubernetes.io/instance: apiconnect
+    app.kubernetes.io/managed-by: ibm-apiconnect
+    app.kubernetes.io/name: apiconnect-minimum
+  name: apis-dev
+  namespace: apic
+spec:
+  version: 10.0.5.0
+  imageRegistry: cp.icr.io/cp/apic
+  profile: n1xc7.m48
+  imagePullSecrets:
+    - ibm-entitlement-key
+  storageClassName: TO_BE_REPLACED_BY_DATA_CENTER_A_RWO_STORAGECLASS
+  license:
+    accept: true
+    license: L-RJON-CEBLEH
+    metric: VIRTUAL_PROCESSOR_CORE
+    use: nonproduction
+  management:
+    apiManagerEndpoint: 
+      annotations:
+        cert-manager.io/issuer: apis-dev-ingress-issuer
+      hosts:
+        - name: >-
+            apis-dev-mgmt-api-manager.TO_BE_REPLACED_HA_PROXY_IP.nip.io
+          secretName: apis-dev-mgmt-api-manager
+    cloudManagerEndpoint: 
+      annotations:
+        cert-manager.io/issuer: apis-dev-ingress-issuer
+      hosts:
+        - name: >-
+            apis-dev-mgmt-cloudmgr.TO_BE_REPLACED_HA_PROXY_IP.nip.io
+          secretName: apis-dev-mgmt-cloudmgr
+    
+    consumerAPIEndpoint: 
+      annotations:
+        cert-manager.io/issuer: apis-dev-ingress-issuer
+      hosts:
+        - name: >-
+            apis-dev-mgmt-consumer-api.TO_BE_REPLACED_HA_PROXY_IP.nip.io
+          secretName: apis-dev-mgmt-consumer-api
+
+    platformAPIEndpoint: 
+      annotations:
+        cert-manager.io/issuer: apis-dev-ingress-issuer
+      hosts:
+        - name: >-
+            apis-dev-mgmt-platform-api.TO_BE_REPLACED_HA_PROXY_IP.nip.io
+          secretName: apis-dev-mgmt-platform-api
+
+    portal:
+      admin: {}
+    
+    encryptionSecret:
+      secretName: mgmt-encryption-key
+    multiSiteHA:
+      mode: TO_BE_REPLACED_HA_MODE
+      replicationEndpoint:
+        annotations:
+          cert-manager.io/issuer: apis-dev-ingress-issuer
+        hosts:
+          - name: >-
+              mgmt-replication.TO_BE_REPLACED_BY_DATA_CENTER_A_INGRESS_DOMAIN
+            secretName: apis-dev-mgmt-replication-server
+      replicationPeerFQDN: >-
+        mgmt-replication.TO_BE_REPLACED_BY_DATA_CENTER_B_INGRESS_DOMAIN
+      tlsClient:
+        secretName: apis-dev-mgmt-replication-client
+    databaseBackup:
+      restartDB:
+        accept: false
+
+  analytics:
+    client:
+      endpoint:
+        annotations:
+          cert-manager.io/issuer: apis-dev-ingress-issuer
+        hosts:
+          - name: >-
+              a7-client.TO_BE_REPLACED_HA_PROXY_IP.nip.io
+            secretName: apis-dev-a7-client
+    ingestion:
+      endpoint:
+        annotations:
+          cert-manager.io/issuer: apis-dev-ingress-issuer
+        hosts:
+          - name: >-
+              a7-ai.TO_BE_REPLACED_HA_PROXY_IP.nip.io
+            secretName: apis-dev-a7-ai 
+    standaloneCluster: true
+    storage:
+      enabled: true
+      type: shared
+  portal:
+    adminClientSubjectDN: ''
+    encryptionSecret:
+      secretName: ptl-encryption-key
+    multiSiteHA:
+      mode: TO_BE_REPLACED_HA_MODE
+      replicationEndpoint:
+        annotations:
+          cert-manager.io/issuer: apis-dev-ingress-issuer
+        hosts:
+          - name: >-
+              ptl-replication.TO_BE_REPLACED_BY_DATA_CENTER_A_INGRESS_DOMAIN
+            secretName: apis-dev-ptl-replication-server
+      replicationPeerFQDN: >-
+        ptl-replication.TO_BE_REPLACED_BY_DATA_CENTER_B_INGRESS_DOMAIN
+      tlsClient:
+        secretName: apis-dev-ptl-replication-client
+    
+    portalAdminEndpoint:
+      annotations:
+        cert-manager.io/issuer: apis-dev-ingress-issuer
+      hosts:
+        - name: >-
+            portal-admin.TO_BE_REPLACED_HA_PROXY_IP.nip.io
+          secretName: portal-admin
+    portalUIEndpoint:
+      annotations:
+        cert-manager.io/issuer: apis-dev-ingress-issuer
+      hosts:
+        - name: >-
+            portal-web.TO_BE_REPLACED_HA_PROXY_IP.nip.io
+          secretName: portal-web
+  gateway:
+    gatewayEndpoint:
+      annotations:
+        cert-manager.io/issuer: apis-dev-ingress-issuer
+      hosts:
+        - name: >-
+            api-gw.TO_BE_REPLACED_HA_PROXY_IP.nip.io
+          secretName: apis-dev-gw-gateway
+              
+    gatewayManagerEndpoint:
+      annotations:
+        cert-manager.io/issuer: apis-dev-ingress-issuer
+      hosts:
+        - name: >-
+            gw-manager.TO_BE_REPLACED_HA_PROXY_IP.nip.io
+          secretName: apis-dev-gw-gateway         
+  eemServicesAPIEndpoint: {}
+  disabledServices:
+    - configurator  

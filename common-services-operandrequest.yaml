@@ -1,0 +1,111 @@
+apiVersion: operator.ibm.com/v1alpha1
+kind: OperandRequest
+metadata:
+  name: ibm-commonui-request
+
+  namespace: ibm-common-services
+  labels:
+    ibm-common-services.common-service/config: 'true'
+    ibm-common-services.common-service/registry: 'true'
+    operator.ibm.com/opreq-control: 'true'
+spec:
+  requests:
+    - operands:
+        - name: ibm-iam-operator
+        - name: ibm-management-ingress-operator
+        - name: ibm-platform-api-operator
+        - name: ibm-cert-manager-operator
+      registry: common-service
+
+---
+
+apiVersion: operator.ibm.com/v1alpha1
+kind: OperandRequest
+metadata:
+  name: ibm-iam-request
+  namespace: ibm-common-services
+  labels:
+    ibm-common-services.common-service/config: 'true'
+    ibm-common-services.common-service/registry: 'true'
+    operator.ibm.com/opreq-control: 'true'
+spec:
+  requests:
+    - operands:
+        - name: ibm-mongodb-operator
+        - name: ibm-cert-manager-operator
+        - name: ibm-management-ingress-operator
+        - name: ibm-ingress-nginx-operator
+      registry: common-service      
+
+---
+
+apiVersion: operator.ibm.com/v1alpha1
+kind: OperandRequest
+metadata:
+  name: ibm-mongodb-request
+  namespace: ibm-common-services
+  labels:
+    ibm-common-services.common-service/config: 'true'
+    ibm-common-services.common-service/registry: 'true'
+    operator.ibm.com/opreq-control: 'true'
+spec:
+  requests:
+    - operands:
+        - name: ibm-cert-manager-operator
+      registry: common-service      
+
+---
+
+apiVersion: operator.ibm.com/v1alpha1
+kind: OperandRequest
+metadata:
+  name: management-ingress
+  namespace: ibm-common-services
+  labels:
+    ibm-common-services.common-service/config: 'true'
+    ibm-common-services.common-service/registry: 'true'
+    operator.ibm.com/opreq-control: 'true'
+spec:
+  requests:
+    - operands:
+        - name: ibm-cert-manager-operator
+      registry: common-service      
+
+---
+
+apiVersion: operator.ibm.com/v1alpha1
+kind: OperandRequest
+metadata:
+  name: monitoring-grafana-operator-request
+  namespace: ibm-common-services
+  labels:
+    ibm-common-services.common-service/config: 'true'
+    ibm-common-services.common-service/registry: 'true'
+    operator.ibm.com/opreq-control: 'true'
+spec:
+  requests:
+    - operands:
+        - name: ibm-iam-operator
+        - name: ibm-management-ingress-operator
+        - name: ibm-commonui-operator
+      registry: common-service      
+
+---
+
+apiVersion: operator.ibm.com/v1alpha1
+kind: OperandRequest
+metadata:
+  name: platform-api-request
+  namespace: ibm-common-services
+  labels:
+    ibm-common-services.common-service/config: 'true'
+    ibm-common-services.common-service/registry: 'true'
+    operator.ibm.com/opreq-control: 'true'
+spec:
+  requests:
+    - operands:
+        - name: ibm-cert-manager-operator
+        - name: ibm-mongodb-operator
+        - name: ibm-iam-operator
+        - name: ibm-management-ingress-operator
+      registry: common-service   

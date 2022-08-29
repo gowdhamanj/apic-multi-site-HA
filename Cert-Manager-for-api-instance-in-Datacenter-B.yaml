@@ -1,0 +1,26 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: apis-dev-mgmt-replication-client
+spec:
+  commonName: apis-dev-mgmt-replication-client
+  duration: 17520h0m0s
+  issuerRef:
+    kind: Issuer
+    name: apis-dev-ingress-issuer
+  renewBefore: 720h0m0s
+  secretName: apis-dev-mgmt-replication-client
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: apis-dev-ptl-replication-client
+spec:
+  commonName: apis-dev-ptl-replication-client
+  duration: 17520h0m0s
+  issuerRef:
+    kind: Issuer
+    name: apis-dev-ingress-issuer
+  renewBefore: 720h0m0s
+  secretName: apis-dev-ptl-replication-client  
