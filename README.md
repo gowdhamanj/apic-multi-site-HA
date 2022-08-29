@@ -290,7 +290,7 @@ In both the data center, execute the below command and check the status of apico
 ```
 oc get apiconnectcluster
 ```
-You should see "Status==READY". Providing the output of the above command
+You should see "STATUS==Ready". Providing the output of the above command
 
 ```
 NAME       READY   STATUS   VERSION    RECONCILED VERSION   AGE
@@ -307,7 +307,7 @@ I strongly belive that the user is well versed in Configure the following. In ca
 5. Create Catalog for e.g "demo"
 6. Enable Gateway Services in the newly created Catalog
 7. Create Developer-Portal for the newly created catalog
-8. Create & Deploy an API in the the 'demo' catalog
+8. Create & Deploy an API in the the 'demo' catalog. Make use of the API yaml "weather-in-city_1.0.0.yaml" & Product yaml "weatherproduct_1.0.0.yaml"
 9. Launch the Developer Portal
 10. Register a new "Consumer Organization" for e.g 'zDeveloper'
 11. Login to Developer portal as 'zDeveloper'
