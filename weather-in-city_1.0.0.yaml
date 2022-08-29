@@ -1,0 +1,296 @@
+swagger: '2.0'
+info:
+  title: Weather in City - Open API 2.0
+  x-ibm-name: weather-in-city
+  version: 1.0.0
+  description: To get the details of Cities in US also the weather in that City
+x-ibm-configuration:
+  gateway: datapower-api-gateway
+  type: rest
+  phase: realized
+  enforced: true
+  testable: true
+  assembly:
+    execute:
+      - invoke:
+          title: get_city_details
+          version: 2.0.0
+          verb: keep
+          target-url: $(city-url)/$(request.parameters.zipcode)
+          persistent-connection: true
+          header-control:
+            type: blocklist
+            values: []
+          parameter-control:
+            type: allowlist
+            values: []
+          backend-type: detect
+          use-http-10: false
+          graphql-send-type: detect
+          cache-response: time-to-live
+          output: city_response
+      - invoke:
+          version: 2.2.0
+          title: get_temperature_details
+          backend-type: detect
+          header-control:
+            type: blocklist
+            values: []
+          parameter-control:
+            type: allowlist
+            values: []
+          http-version: HTTP/1.1
+          timeout: 60
+          verb: keep
+          chunked-uploads: true
+          persistent-connection: true
+          cache-response: protocol
+          cache-ttl: 900
+          stop-on-error: []
+          graphql-send-type: detect
+          websocket-upgrade: false
+          target-url: $(temperature-url)?zipcode=$(request.parameters.zipcode)
+          output: temperature_response
+      - map:
+          version: 2.0.0
+          title: map
+          inputs:
+            city_response:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  post code:
+                    type: string
+                    name: post code
+                  country:
+                    type: string
+                    name: country
+                  country abbreviation:
+                    type: string
+                    name: country abbreviation
+                  places:
+                    type: array
+                    items:
+                      properties:
+                        place name:
+                          type: string
+                          name: place name
+                        longitude:
+                          type: string
+                          name: longitude
+                        state:
+                          type: string
+                          name: state
+                        state abbreviation:
+                          type: string
+                          name: state abbreviation
+                        latitude:
+                          type: string
+                          name: latitude
+                      type: object
+                    name: places
+                example: >-
+                  {"post code":"10504","country":"United States","country
+                  abbreviation":"US","places":[{"place
+                  name":"Armonk","longitude":"-73.7009","state":"New
+                  York","state abbreviation":"NY","latitude":"41.136"}]}
+              variable: city_response.body
+              content: application/json
+            temperature_response:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  zip:
+                    type: number
+                    name: zip
+                  temperature:
+                    type: number
+                    name: temperature
+                  humidity:
+                    type: number
+                    name: humidity
+                  city:
+                    type: string
+                    name: city
+                  state:
+                    type: string
+                    name: state
+                  message:
+                    type: string
+                    name: message
+                example: >-
+                  {"zip":10504,"temperature":95,"humidity":45,"city":"Armonk,
+                  North Castle","state":"New York","message":"Sample Randomly
+                  Generated"}
+              variable: temperature_response.body
+              content: application/json
+          outputs:
+            output:
+              schema:
+                $ref: '#/definitions/weather-in-city'
+              variable: message.body
+              content: application/json
+          actions:
+            - set: output.post code
+              from: city_response.post code
+            - set: output.country
+              from: city_response.country
+            - set: output.country abbreviation
+              from: city_response.country abbreviation
+            - set: output.weather.temperature
+              from: temperature_response.temperature
+            - set: output.weather.humidity
+              from: temperature_response.humidity
+            - set: output.place.place name
+              from: city_response.places.place name
+            - set: output.place.state
+              from: city_response.places.state
+            - set: output.place.longitude
+              from: city_response.places.longitude
+            - set: output.place.state abbreviation
+              from: city_response.places.state abbreviation
+            - set: output.place.latitude
+              from: city_response.places.latitude
+          options:
+            mapEmulateV4EmptyJSONObject: false
+            mapEmulateV4DefaultRequiredProps: false
+            mapEnablePostProcessingJSON: false
+            mapReferenceLimit: 1
+            mapResolveApicVariables: false
+            mapArrayFirstElementValue: true
+    finally: []
+    catch:
+      - default: []
+  properties:
+    city-url:
+      value: http://api.zippopotam.us/us
+      description: To get the City Details from a Backend service.
+    temperature-url:
+      value: https://myweatherprovider.mybluemix.net/current
+      description: The Backend Service which provides the temperature in the City.
+  application-authentication:
+    certificate: false
+  activity-log:
+    enabled: true
+    success-content: activity
+    error-content: payload
+  catalogs: {}
+  cors:
+    enabled: true
+basePath: /v1/weather-in-city
+paths:
+  /{zipcode}:
+    get:
+      responses:
+        '200':
+          description: success
+          schema:
+            type: object
+            title: output
+            properties:
+              output:
+                $ref: '#/definitions/weather-in-city'
+      consumes: []
+      produces: []
+    parameters:
+      - name: zipcode
+        required: true
+        in: path
+        type: string
+securityDefinitions: {}
+schemes:
+  - https
+produces:
+  - application/json
+consumes:
+  - application/json
+parameters:
+  zipcode:
+    name: zipcode
+    required: true
+    in: path
+    type: string
+    description: Provide the 'zipcode' of a city in US. For e.g 10504.
+tags:
+  - name: city
+    description: Cities in US
+    externalDocs:
+      url: https://www.ibm.com
+      description: Place holder to provide required details
+definitions:
+  place:
+    title: Place
+    type: object
+    properties:
+      place name:
+        title: Name of the Place
+        type: string
+        description: Name of the Place. For e.g 'Armonk'
+        example: Armonk
+      state:
+        title: State
+        type: string
+        description: Name of the State the city belongs
+        example: NY
+      state abbreviation:
+        title: State Abbreviation
+        type: string
+        description: State Abbreviation of a state. For e.g "NY" for "New York"
+        example: NY
+      longitude:
+        title: Longitude of Co-Ord
+        description: Longitude of Co-Ord. For e.g. "-73.7009"
+        type: string
+        example: -73.7009
+      latitude:
+        title: Latitude
+        type: string
+        description: Latitude of the place.
+        example: 41.136
+  weather:
+    title: Weather
+    type: object
+    description: This object will hold the details of the "temperature" & "humidity"
+    properties:
+      temperature:
+        title: Temperature
+        type: string
+        description: Temperature in Farenheit
+        example: 60
+      humidity:
+        title: Humidity
+        type: string
+        description: Humidity in the City
+        example: 45
+  weather-in-city:
+    title: Weather in City
+    type: object
+    description: This Object Contains the Details of the City as well as Weather
+    properties:
+      post code:
+        title: PostCode
+        type: string
+        description: Postal Code of the City
+        example: 10504
+      country:
+        title: Country
+        type: string
+        description: 'City that belongs to this Country. '
+        example: United States
+      country abbreviation:
+        title: Country Abbreviation
+        type: string
+        description: >-
+          Country Abbreviation for the Country. For. e.g "US" for "United
+          States"
+      weather:
+        $ref: '#/definitions/weather'
+      place:
+        $ref: '#/definitions/place'
+responses:
+  '200':
+    description: Successful in retrieving the details of the city and its weather
+    schema:
+      $ref: '#/definitions/weather-in-city'

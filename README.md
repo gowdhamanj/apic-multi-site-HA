@@ -97,7 +97,7 @@ site-b-ingress-endpoint        142.126.108.171
 `***NOTE***`
 In the Active/Passive deployment, the `HAProxy should contain an entry that should always points to Active Site.` In this example, DataCenter A is an Active Site now. We also have the details of DataCenter B which is commented for future use while testing failover scenario. While we do a failover scenario testing, we need to swap the entry. i.e. Active becomes Passive and vice-versa. 
 
-### Install and Configure APIConnect in Data Center A
+### Install APIConnect in Data Center A
 
 Clone this repository 
 ```
@@ -207,7 +207,7 @@ yq -i 'del(.metadata.resourceVersion)' ca-issuer-secret.yaml && cat ca-issuer-se
 
 ```
 
-### Install and Configure APIConnect in Data Center B
+### Install APIConnect in Data Center B
 Using `oc` cli, Login to OpenShift cluster
 ```
 oc login --token=sha256~a8lvYB14bIO7HhjJ7KIb4JgP2eT_G2Pg2mgDT3kEkZs --server=https://c100-e.eu-gb.containers.cloud.ibm.com:32280
@@ -284,3 +284,47 @@ Create the Management & Portal Encryption Key. The same key that is used in Data
 ```
 oc apply -f apic-instance-in-data-center-B.yaml
 ```
+
+### APIConnect Installation verification in Data Center A & B
+In both the data center, execute the below command and check the status of apiconnectcluster before you proceed to Next section.
+```
+oc get apiconnectcluster
+```
+You should see "Status==READY". Providing the output of the above command
+
+```
+NAME       READY   STATUS   VERSION    RECONCILED VERSION   AGE
+apis-dev   4/4     Ready    10.0.5.0   10.0.5.0-1281        107m
+```
+
+
+### Configure APIConnect in Data Center A
+I strongly belive that the user is well versed in Configure the following. In case you need help for the below steps pls refer to IBM APIConnect 10.0.x documentation
+1. Configure EMail Server
+2. Configure Topology
+3. Create Provider Organization
+4. Login to Provider Organization using API Manager
+5. Create Catalog for e.g "demo"
+6. Enable Gateway Services in the newly created Catalog
+7. Create Developer-Portal for the newly created catalog
+8. Create & Deploy an API in the the 'demo' catalog
+9. Launch the Developer Portal
+10. Register a new "Consumer Organization" for e.g 'zDeveloper'
+11. Login to Developer portal as 'zDeveloper'
+12. Browse for the APIs
+13. Subscribe for an API
+14. Test the API
+
+
+
+
+
+
+
+
+
+
+
+
+
+

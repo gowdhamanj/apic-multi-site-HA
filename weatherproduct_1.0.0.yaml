@@ -1,0 +1,31 @@
+info:
+  title: WeatherProduct
+  name: weatherproduct
+  version: 1.0.0
+apis:
+  weather-in-city1.0.0:
+    $ref: weather-in-city_1.0.0.yaml
+gateways:
+  - datapower-api-gateway
+plans:
+  default-plan:
+    title: Default Plan
+    description: Default Plan
+    approval: false
+    rate-limits:
+      default:
+        value: 100/1hour
+    apis:
+      weather-in-city1.0.0: {}
+product: 1.0.0
+visibility:
+  view:
+    enabled: true
+    type: public
+    tags: []
+    orgs: []
+  subscribe:
+    enabled: true
+    type: authenticated
+    tags: []
+    orgs: []
