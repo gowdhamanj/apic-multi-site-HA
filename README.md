@@ -168,7 +168,9 @@ Pls update the below environment varibles before setting it up.
 export DATA_CENTRE_A_INGRESS_DOMAIN=<pasted the Ingress domain of the Data Center A>
 export DATA_CENTER_A_RWO_STORAGECLASS=<paste the RWO storage class in Data Center A>
 export DATA_CENTRE_B_INGRESS_DOMAIN=<pasted the Ingress domain of the Data Center B>
+```
 #Prove the Ip address of HA Proxy server
+```
 export HA_PROXY_IP=140.229.168.60
 export HA_MODE=active
 ```
@@ -256,7 +258,9 @@ Set the env variable
 export DATA_CENTRE_B_INGRESS_DOMAIN=<pasted the Ingress domain of the Data Center B>
 export DATA_CENTER_B_RWO_STORAGECLASS=<paste the RWO storage class in Data Center B>
 export DATA_CENTRE_A_INGRESS_DOMAIN=<pasted the Ingress domain of the Data Center A>
+```
 #Prove the Ip address of HA Proxy server
+```
 export HA_PROXY_IP=140.229.168.60
 export HA_MODE=passive
 ```
