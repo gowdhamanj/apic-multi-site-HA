@@ -330,6 +330,7 @@ Let us get started
 1. Login to Data Center A Cluster
 
 `For Making changes in Management Component`
+
     2. Run the below command
     ```
         oc get managementcluster
@@ -344,7 +345,10 @@ Let us get started
     ```
         oc edit managementcluster apis-dev-mgmt -n apic
     ```   
+
+
 `For Making changes in Portal Component`
+
     5. Run the 
     ```
         oc get portalcluster
