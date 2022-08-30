@@ -368,38 +368,42 @@ Let us get started
 
 `In Data Center B`
 1. Login to Data Center B Cluster
+
 `For Making changes in Management Component`
-2. Run the
-```
-    oc get managementcluster
-```
-    NAME            READY   STATUS    VERSION    RECONCILED VERSION   AGE
-    apis-dev-mgmt   8/8     Running   10.0.5.0   10.0.5.0-1281        13h
-3. Get the current state by running the below command
-```
-   oc describe managementcluster apis-dev-mgmt -n apic | grep 'Ha Mode' 
-```
-4. Edit 'apis-dev-mgmt' and change mode from 'passive'---to---> 'active'. Run the below command to search for 'mode: passive' under 'multiSiteHA:'
-```
-    oc edit managementcluster apis-dev-mgmt -n apic
-```
+
+    2. Run the below command   
+        oc get managementcluster
+    
+        NAME            READY   STATUS    VERSION    RECONCILED VERSION   AGE
+        apis-dev-mgmt   8/8     Running   10.0.5.0   10.0.5.0-1281        15h
+
+    3. Get the current state by running the below command
+    
+        oc describe managementcluster apis-dev-mgmt -n apic | grep 'Ha Mode' 
+    
+    4. Edit 'apis-dev-mgmt' and change mode from 'passive'---to---> 'active'. Run the below command to search for 'mode: passive' under 'multiSiteHA:'
+    
+        oc edit managementcluster apis-dev-mgmt -n apic
+       
+
+
 `For Making changes in Portal Component`
-5. Run the 
-```
-    oc get portalcluster
-```
-    NAME           READY   STATUS    VERSION    RECONCILED VERSION   AGE
 
-    apis-dev-ptl   6/6     Running   10.0.5.0   10.0.5.0-1281        14h
-
-6. Get the current state by running the below command
-```
-   oc describe portalcluster apis-dev-ptl -n apic | grep 'Ha Mode'
-```
-7. Edit 'apis-dev-ptl' and change mode from 'passive'---to---> 'active'. Run the below command to search for 'mode: active' under 'multiSiteHA:'
-```
-    oc edit portalcluster apis-dev-ptl -n apic
-```
+    5. Run the below command
+    
+        oc get portalcluster
+    
+        NAME           READY   STATUS    VERSION    RECONCILED VERSION   AGE
+        apis-dev-ptl   6/6     Running   10.0.5.0   10.0.5.0-1281        14h
+    
+    6. Get the current state by running the below command
+    
+        oc describe portalcluster apis-dev-ptl -n apic | grep 'Ha Mode'
+    
+    7. Edit 'apis-dev-ptl' and change mode from 'passive'---to---> 'active'. Run the below command to search for 'mode: passive' under 'multiSiteHA:'
+    
+        oc edit portalcluster apis-dev-ptl -n apic
+    
 
 
 Pls refer to the [Fail Over Testing](https://www.ibm.com/docs/en/api-connect/10.0.1.x?topic=deployment-failure-handling-two-data-center)  for more details. 
@@ -425,9 +429,15 @@ For Developer Portal:
 
 ### To Validate the replicated data from DateCenter A to DataCenter B
 
+I strongly belive that the user is well versed in Configure the following. In case you need help for the below steps pls refer to IBM APIConnect 10.0.x documentation
+1. Login to API Admin Console and Validate
+2. Login to API Manager & Validate
+3. Login to Developer Portal & Validate
+4. Test the API & Validate
 
 
-
+### Summary
+Pls consider this article for Dev/Learning & Demo purposes. 
 
 
 
