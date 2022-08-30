@@ -17,6 +17,11 @@ To achieve high availability in your API Connect deployment, a minimum of three 
     - Developer Portal is synchronous, and therefore the latency is limited to 80ms or less.
 * The API Manager and the Developer Portal services in the two data centers must either all be highly available, or none of them highly available, and the number of nodes on each data center must match.
 
+## Deployment Topology (Just for representation)
+Below provided topolofy can not be consided for Prodeuction. It is just for the demo and representaional purpose to explain this article.
+```
+![Deployment-Top-Representation](./images/Deployment-Top-Representation.png)
+```
 ## Step-By-Step instructions
 This article would help you to with step by step installation and configuration instructions to achieve IBM APIConnect multi-site HA Active/Passive also how to test the deployment in case of failure.
 
@@ -321,21 +326,84 @@ I strongly belive that the user is well versed in Configure the following. In ca
 To achieve failover testing, we need to change the state of HAMode. In this scenario, we started with Data Center A as 'Active' & Data Center B as 'Passive'. 
 Let us get started
 
+`In Data Center A`
 1. Login to Data Center A Cluster
+`For Making changes in Management Component`
 2. Run the 
     oc get managementcluster
 
     NAME            READY   STATUS    VERSION    RECONCILED VERSION   AGE
     apis-dev-mgmt   19/19   Running   10.0.5.0   10.0.5.0-1281        15h
+3. Get the current state by running the below command
+   oc describe managementcluster apis-dev-mgmt -n apic | grep 'Ha Mode' 
 
-3. Edit 'apis-dev-mgmt' and change hamode from 'active'---to---> 'passive'. Run the below command to change
+4. Edit 'apis-dev-mgmt' and change mode from 'active'---to---> 'passive'. Run the below command to search for 'mode: active' under 'multiSiteHA:'
     oc edit managementcluster apis-dev-mgmt -n apic
-    
+`For Making changes in Portal Component`
+5. Run the 
+    oc get portalcluster
+
+    NAME           READY   STATUS    VERSION    RECONCILED VERSION   AGE
+    apis-dev-ptl   6/6     Running   10.0.5.0   10.0.5.0-1281        14h
+
+6. Get the current state by running the below command
+   oc describe portalcluster apis-dev-ptl -n apic | grep 'Ha Mode'
+
+7. Edit 'apis-dev-ptl' and change mode from 'active'---to---> 'passive'. Run the below command to search for 'mode: active' under 'multiSiteHA:'
+    oc edit portalcluster apis-dev-ptl -n apic
+
+
+
+`In Data Center B`
+1. Login to Data Center B Cluster
+`For Making changes in Management Component`
+2. Run the 
+    oc get managementcluster
+
+    NAME            READY   STATUS    VERSION    RECONCILED VERSION   AGE
+    apis-dev-mgmt   8/8     Running   10.0.5.0   10.0.5.0-1281        13h
+3. Get the current state by running the below command
+   oc describe managementcluster apis-dev-mgmt -n apic | grep 'Ha Mode' 
+
+4. Edit 'apis-dev-mgmt' and change mode from 'passive'---to---> 'active'. Run the below command to search for 'mode: passive' under 'multiSiteHA:'
+    oc edit managementcluster apis-dev-mgmt -n apic
+`For Making changes in Portal Component`
+5. Run the 
+    oc get portalcluster
+
+    NAME           READY   STATUS    VERSION    RECONCILED VERSION   AGE
+    apis-dev-ptl   6/6     Running   10.0.5.0   10.0.5.0-1281        14h
+
+6. Get the current state by running the below command
+   oc describe portalcluster apis-dev-ptl -n apic | grep 'Ha Mode'
+
+7. Edit 'apis-dev-ptl' and change mode from 'passive'---to---> 'active'. Run the below command to search for 'mode: active' under 'multiSiteHA:'
+    oc edit portalcluster apis-dev-ptl -n apic
 
 
 
 
+```
+Pls refer to the  [Falover Handing](https://www.ibm.com/docs/en/api-connect/10.0.1.x?topic=deployment-failure-handling-two-data-center) for more details. Provided an extract from the APIC documentation
+Entire data center failover
 
+To failover an entire data center, follow the previous steps to failover the API Manager service, followed by the steps to failover each Developer Portal service in that data center.
+
+How long it takes to complete the failover varies, and depends on hardware speed, network latency, and the size of the databases. However, here are some approximate timings:
+For API Manager:
+
+    passive to active approximately 5 minutes
+    active to passive approximately 15 minutes
+
+For Developer Portal:
+
+    passive to active 15 - 40 minutes
+    active to passive approximately 10 minutes
+
+
+```
+
+### To Validate the replicated data from DateCenter A to DataCenter B
 
 
 
