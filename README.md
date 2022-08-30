@@ -19,9 +19,9 @@ To achieve high availability in your API Connect deployment, a minimum of three 
 
 ## Deployment Topology (Just for representation)
 Below provided topoloyy which can not be consided for production. It is just for the demo and representaional purpose to explain the concept.
-```
+
 ![Deployment-Top-Representation](images/Deployment-Top-Representation.png)
-```
+
 ## Step-By-Step instructions
 This article would help you to with step by step installation and configuration instructions to achieve IBM APIConnect multi-site HA Active/Passive also how to test the deployment in case of failure.
 
@@ -383,11 +383,9 @@ Let us get started
 
 
 
-
+Pls refer to the [Fail Over Testing](https://www.ibm.com/docs/en/api-connect/10.0.1.x?topic=deployment-failure-handling-two-data-center)  for more details. 
 ```
-
-
-Pls refer to the [Fail Over Testing](https://www.ibm.com/docs/en/api-connect/10.0.1.x?topic=deployment-failure-handling-two-data-center)  for more details. Provided an extract from the APIC documentation.
+Provided an extract from the APIC documentation.
 Entire data center failover
 
 To failover an entire data center, follow the previous steps to failover the API Manager service, followed by the steps to failover each Developer Portal service in that data center.
