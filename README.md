@@ -419,6 +419,17 @@ For Developer Portal:
 
 ```
 
+### Update HAProxy To point to currently active site
+Edit the `/etc/haproxy/haproxy.cfg` by swapping the entry
+```
+ #INFO: Ensure you comment the Passive Site 
+ #INFO: Below on is pointing to Data Center A. This IP address (53.53.89.75) is IP address of Ingress Domain in DataCenter A
+ #server site-a-ingress-endpoint         53.53.89.75:443 check
+ 
+ #INFO: Below on is pointing to Data Center B. This IP address (142.126.108.171) is IP address of Ingress Domain in DataCenter B
+ server site-b-ingress-endpoint         142.126.108.171:443 check
+```
+
 ### To Validate the replicated data from DateCenter A to DataCenter B
 
 I strongly belive that the user is well versed in Configure the following. In case you need help for the below steps pls refer to IBM APIConnect 10.0.x documentation
