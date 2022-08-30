@@ -331,39 +331,39 @@ Let us get started
 
 `For Making changes in Management Component`
 
-    2. Run the below command
-    ```
+    2. Run the below command   
         oc get managementcluster
-    ```
+    
         NAME            READY   STATUS    VERSION    RECONCILED VERSION   AGE
         apis-dev-mgmt   19/19   Running   10.0.5.0   10.0.5.0-1281        15h
+
     3. Get the current state by running the below command
-    ```
-       oc describe managementcluster apis-dev-mgmt -n apic | grep 'Ha Mode' 
-    ```
+    
+        oc describe managementcluster apis-dev-mgmt -n apic | grep 'Ha Mode' 
+    
     4. Edit 'apis-dev-mgmt' and change mode from 'active'---to---> 'passive'. Run the below command to search for 'mode: active' under 'multiSiteHA:'
-    ```
+    
         oc edit managementcluster apis-dev-mgmt -n apic
-    ```   
+       
 
 
 `For Making changes in Portal Component`
 
-    5. Run the 
-    ```
+    5. Run the below command
+    
         oc get portalcluster
-    ```
+    
         NAME           READY   STATUS    VERSION    RECONCILED VERSION   AGE
         apis-dev-ptl   6/6     Running   10.0.5.0   10.0.5.0-1281        14h
     
     6. Get the current state by running the below command
-    ```
-       oc describe portalcluster apis-dev-ptl -n apic | grep 'Ha Mode'
-    ```
+    
+        oc describe portalcluster apis-dev-ptl -n apic | grep 'Ha Mode'
+    
     7. Edit 'apis-dev-ptl' and change mode from 'active'---to---> 'passive'. Run the below command to search for 'mode: active' under 'multiSiteHA:'
-    ```
+    
         oc edit portalcluster apis-dev-ptl -n apic
-    ```
+    
 
 
 `In Data Center B`
