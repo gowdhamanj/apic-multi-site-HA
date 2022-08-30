@@ -317,6 +317,21 @@ I strongly belive that the user is well versed in Configure the following. In ca
 
 
 
+### Failover Testing
+To achieve failover testing, we need to change the state of HAMode. In this scenario, we started with Data Center A as 'Active' & Data Center B as 'Passive'. 
+Let us get started
+
+1. Login to Data Center A Cluster
+2. Run the 
+    oc get managementcluster
+
+    NAME            READY   STATUS    VERSION    RECONCILED VERSION   AGE
+    apis-dev-mgmt   19/19   Running   10.0.5.0   10.0.5.0-1281        15h
+
+3. Edit 'apis-dev-mgmt' and change hamode from 'active'---to---> 'passive'. Run the below command to change
+    oc edit managementcluster apis-dev-mgmt -n apic
+    
+
 
 
 
