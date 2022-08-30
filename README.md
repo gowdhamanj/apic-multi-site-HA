@@ -334,8 +334,6 @@ Let us get started
     2. Run the below command   
         oc get managementcluster
     
-        NAME            READY   STATUS    VERSION    RECONCILED VERSION   AGE
-        apis-dev-mgmt   19/19   Running   10.0.5.0   10.0.5.0-1281        15h
 
     3. Get the current state by running the below command
     
@@ -353,8 +351,6 @@ Let us get started
     
         oc get portalcluster
     
-        NAME           READY   STATUS    VERSION    RECONCILED VERSION   AGE
-        apis-dev-ptl   6/6     Running   10.0.5.0   10.0.5.0-1281        14h
     
     6. Get the current state by running the below command
     
@@ -374,8 +370,6 @@ Let us get started
     2. Run the below command   
         oc get managementcluster
     
-        NAME            READY   STATUS    VERSION    RECONCILED VERSION   AGE
-        apis-dev-mgmt   8/8     Running   10.0.5.0   10.0.5.0-1281        15h
 
     3. Get the current state by running the below command
     
@@ -393,8 +387,6 @@ Let us get started
     
         oc get portalcluster
     
-        NAME           READY   STATUS    VERSION    RECONCILED VERSION   AGE
-        apis-dev-ptl   6/6     Running   10.0.5.0   10.0.5.0-1281        14h
     
     6. Get the current state by running the below command
     
