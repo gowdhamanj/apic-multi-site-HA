@@ -25,6 +25,8 @@ Below provided topoloyy which can not be consided for production. It is just for
 ## Step-By-Step instructions
 This article would help you to with step by step installation and configuration instructions to achieve IBM APIConnect multi-site HA Active/Passive also how to test the deployment in case of failure.
 
+Pls refer to the youtube video for demo : https://www.youtube.com/watch?v=SDteeU-TJCY
+
 ### Pre-Requsite
 
 1. Two RedHat OpenShift Cluster v4.9 or later with Storage Provisioned, IngressDomain configured. Pls ensure your OpenShift cluster configured with 16Core x 32GB RAM worker node. Minimum 3 worker nodes in each cluster.
